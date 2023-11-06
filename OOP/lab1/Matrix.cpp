@@ -6,6 +6,27 @@
 #include <cmath>
 
 
+std::vector<std::vector<double>> Matrix::rtnM()
+{
+    return this->m;
+}
+
+Matrix::Matrix() {
+    this->colms = 0;
+    this->rows = 0;
+    m.resize(1);
+    m[0].resize(1);
+    m[0][0] = 0;
+}
+Matrix::Matrix(int rows, int colms) {
+    this->colms = colms;
+    this->rows = rows;
+    m.resize(1);
+    m[0].resize(1);
+    m[0][0] = 0;
+}
+
+
 Matrix::Matrix(std::string str) {
     this->colms = 0;
     this->rows = 0;
@@ -27,6 +48,29 @@ Matrix::Matrix(std::string str) {
     in.close();
 }
 
+int Matrix::rtnRows()
+{
+    return this->rows;
+}
+
+int Matrix::rtnColms()
+{
+    return this->colms;
+}
+
+Matrix::Matrix(const Matrix& m1){
+    colms = m1.colms;
+    rows = m1.rows;
+    m = m1.m;
+}
+
+Matrix& Matrix::operator=(const Matrix& m1){
+    this->colms = m1.colms;
+    this->rows = m1.rows;
+    this->m = m1.m;
+    return *this;
+}
+
 void Matrix::printMatrix() {
     for (int i = 0; i < this->rows; i++) {
         for (int j = 0; j < this->colms; j++) {
@@ -36,16 +80,9 @@ void Matrix::printMatrix() {
     }
 }
 
-void Matrix::miltOnNum(double num) {
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < colms; j++) {
-            m[i][j] *= num;
-        }
-    }
-}
-
-Matrix Matrix::transp() {
-    
+Matrix Matrix::miltOnNum(double num) {
+    int colms = this->colms;
+    int rows = this->rows;
     Matrix temp(colms, rows);
     temp.m.resize(temp.rows);
     for (int i = 0; i < temp.rows; i++) {
@@ -54,11 +91,30 @@ Matrix Matrix::transp() {
             temp.m[i][j] = m[j][i];
         }
     }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < colms; j++) {
+            temp.m[i][j] *= num;
+        }
+    }
+    return temp;
+}
+
+Matrix Matrix::transp() {
+    Matrix temp(colms, rows);
+
+    temp.m.resize(temp.rows);
+    for (int i = 0; i < temp.rows; i++) {
+        temp.m[i].resize(temp.colms);
+        for (int j = 0; j < temp.colms; j++) {
+            temp.m[i][j] = m[j][i];
+        }
+    }
+
     return temp;
 }
 
 double Matrix::det() {
-   
+
     std::vector<std::vector<double>> m = this->rtnM();
     int n = this->rtnColms();
     double num1, num2, det = 1, index, total = 1;
@@ -145,28 +201,28 @@ Matrix Matrix::inverse() {
     temp1.resize(sizeM);
     for (int i = 0; i < sizeM; i++)
         temp1[i].resize(sizeM);
-    
-    for (int q = 0;q < sizeM; q++) {
-        for (int w = 0;w < sizeM; w++) {
+
+    for (int q = 0; q < sizeM; q++) {
+        for (int w = 0; w < sizeM; w++) {
             int ii = 0;
             int jj = 0;
-            for (int i = 0;i < sizeM;i++) {
+            for (int i = 0; i < sizeM; i++) {
                 if (i == q) continue;
-                for (int j = 0;j < sizeM;j++) {
+                for (int j = 0; j < sizeM; j++) {
                     if (j == w) continue;
-                    
+
                     temp[ii][jj] = m[i][j];
-                    
+
                     jj++;
                 }
                 jj = 0;
                 ii++;
             }
-            temp1[q][w] = detA(temp,size)/ detM * pow(-1,q+w+2);
+            temp1[q][w] = detA(temp, size) / detM * pow(-1, q + w + 2);
         }
     }
-    for (int i = 0;i < sizeM;i++) {
-        for (int j = 0;j < sizeM;j++) {
+    for (int i = 0; i < sizeM; i++) {
+        for (int j = 0; j < sizeM; j++) {
             std::cout << temp1[i][j] << " ";
         }
         std::cout << "\n";
@@ -180,8 +236,8 @@ Matrix Matrix::inverse() {
         }
     }
     return fin;
-    
-    
+
+
     //std::cout << size << "\n";
 }
 
