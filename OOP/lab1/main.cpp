@@ -21,7 +21,7 @@ int main()
     std::cout << "Что бы вывести матрицу в файл нажмите 8 \n";
     std::cout << "Что бы удалить матрицу нажмите 9 \n";
     do {
-        
+
         std::cin >> n;
         switch (n) {
         case 1:
@@ -36,7 +36,7 @@ int main()
         case 2:
             std::cout << "Введите число на которое хотите умножить матрицу: ";
             double num; std::cin >> num;
-            a.miltOnNum(num);
+            a = a.miltOnNum(num);
         case 3:
             a = a.transp();
             break;
@@ -45,7 +45,7 @@ int main()
                 std::cout << "Матрица должна быть квадратной. \n";
                 continue;
             }
-            std::cout<< a.det()<<"\n";
+            std::cout << a.det() << "\n";
             break;
         case 5:
             if (a.rtnColms() != a.rtnRows()) {
@@ -56,7 +56,7 @@ int main()
                 std::cout << "Определитель равен нулю. \n";
                 continue;
             }
-            a=a.inverse();
+            a = a.inverse();
             break;
         case 6:
             a.printMatrix();
