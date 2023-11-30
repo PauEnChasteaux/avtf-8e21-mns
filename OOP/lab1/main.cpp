@@ -70,6 +70,11 @@ int main()
         case 9:
             a = q;
             break;
+        /**
+        case 10:
+            std::cout<<a;
+            break;
+        **/
         default:
             continue;
             break;
