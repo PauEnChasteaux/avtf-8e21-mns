@@ -282,3 +282,18 @@ Matrix::~Matrix() {
     }
     m.clear();
 }
+
+
+/**
+    std::ostream& operator<<(std::ostream& out, const Matrix &m1)
+{
+
+    for (int i = 0; i < m1.rows; i++) {
+        for (int j = 0; j < m1.colms; j++) {
+            out << m1.m[i][j] << " ";
+        }
+        out << "\n";
+    }
+    return out;
+}
+**/
