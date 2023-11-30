@@ -17,7 +17,7 @@ public:
     
     Matrix(const Matrix& m1);
     Matrix& operator=(const Matrix& m1);
-
+    //friend std::ostream& operator<<(std::ostream& out, const Matrix &m1);
     void printMatrix();
     Matrix miltOnNum(double num);
     Matrix transp();
