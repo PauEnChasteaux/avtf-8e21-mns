@@ -32,14 +32,17 @@ class Lines
 {
 public:
 	Lines();
-	//Lines(std::string line);
-	Lines(std::string str,bool check);
+	Lines(std::string str,int check);
 
 	std::string get();
 	/*friend std::ostream& operator<<(std::ostream& out, const Lines& l1);*/
 
 	int substring(std::string s);
+	
 	int wrldCount();
+
+	void outInTextFile(std::string s);
+    void outInCSVFile(std::string s);
 
 	virtual ~Lines();
 
