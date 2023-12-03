@@ -35,12 +35,12 @@ int length(std::string s) {
 	return counter;
 }
 
-Lines::Lines() { 
-	this->line = ""; 
+Lines::Lines() {
+	this->line = "";
 }
 
-Lines::Lines(std::string str, int check){
-	if (check==2) {
+Lines::Lines(std::string str, int check) {
+	if (check == 2) {
 		std::ifstream in(str);
 		std::string lineFromFile;
 		if (in.is_open()) {
@@ -53,7 +53,7 @@ Lines::Lines(std::string str, int check){
 		in.close();
 		this->line = lineFromFile;
 	}
-	if (check==1) {
+	if (check == 1) {
 		this->line = str;
 		//std::cout << " not file Попробуйте ещё раз. \n";
 	}
@@ -111,7 +111,7 @@ int Lines::substring(std::string s) {
 			int currentLength = 0;
 			pos = i;
 			for (int j = 0, ij = i;s[j] != '\0';j++) {
-				
+
 				currentLength = j + 1;
 				if (s[j] != this->line[ij])break;
 				ij++;
@@ -128,40 +128,79 @@ int Lines::substring(std::string s) {
 
 int Lines::wrldCount() {
 	int counter = 0;
-	for (int i = 0;line[i] != '\0';i++){
+	for (int i = 0;line[i] != '\0';i++) {
 		if (line[i] == ' ' && line[i + 1] == ' ')continue;
 		if (line[i] == ' ' || line[i + 1] == '\0')counter++;
 	}
 	return counter;
 }
 
-void Lines::outInTextFile(std::string str) {
-    std::ofstream out(str);
 
-    if (out.is_open())
-    {
-        std::map<std::string, int>::iterator itr;
-		for (itr = words.begin(); itr != words.end(); ++itr) {
-			out << '\t' << itr->first << '\t' << itr->second << '\n';
+
+
+
+void Lines::outInTextFile(std::string str, int n) {
+	std::ofstream out(str);
+
+	if (out.is_open())
+	{
+		std::map<std::string, int>::iterator itr;
+		if (n == 1) {
+			char ch = 'z';
+			int i = 0;
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				if (itr->first[0]<ch) {
+					ch = itr->first[0];
+				}
+				
+			}
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				if (itr->first[0] == ch) {
+					out << '\t' << itr->first << '\t' << itr->second << '\n';
+					ch++;
+				}
+			}
 		}
-    }
-    out.close();
+		
+		if (n == 2) {
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				out << '\t' << itr->first << '\t' << itr->second << '\n';
+			}
+		}
+		if (n == 3) {
+			int ch = 1000;
+			int i = 0;
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				if (itr->second < ch) {
+					ch = itr->second;
+				}
+
+			}
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				if (itr->second == ch) {
+					out << '\t' << itr->first << '\t' << itr->second << '\n';
+					ch++;
+				}
+			}
+		}
+	}
+	out.close();
 }
 
-void Lines::outInCSVFile(std::string str) {
-    std::ofstream out(str);
+void Lines::outInCSVFile(std::string str,int n) {
+	std::ofstream out(str);
 
-    if (out.is_open())
-    {
-        if (out.is_open())
-    {
-        std::map<std::string, int>::iterator itr;
-		for (itr = words.begin(); itr != words.end(); ++itr) {
-			out  << itr->first << ',' << itr->second << '\n';
+	if (out.is_open())
+	{
+		if (out.is_open())
+		{
+			std::map<std::string, int>::iterator itr;
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				out << itr->first << ',' << itr->second << '\n';
+			}
 		}
-    }
-    }
-    out.close();
+	}
+	out.close();
 }
 
 Lines::~Lines()
