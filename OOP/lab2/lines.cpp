@@ -192,11 +192,52 @@ void Lines::outInCSVFile(std::string str,int n) {
 
 	if (out.is_open())
 	{
-		if (out.is_open())
+		/*if (out.is_open())
 		{
 			std::map<std::string, int>::iterator itr;
 			for (itr = words.begin(); itr != words.end(); ++itr) {
 				out << itr->first << ',' << itr->second << '\n';
+			}
+		}*/
+
+
+		std::map<std::string, int>::iterator itr;
+		if (n == 1) {
+			char ch = 'z';
+			int i = 0;
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				if (itr->first[0] < ch) {
+					ch = itr->first[0];
+				}
+
+			}
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				if (itr->first[0] == ch) {
+					out << itr->first << ',' << itr->second << '\n';
+					ch++;
+				}
+			}
+		}
+
+		if (n == 2) {
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				out << itr->first << ',' << itr->second << '\n';
+			}
+		}
+		if (n == 3) {
+			int ch = 1000;
+			int i = 0;
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				if (itr->second < ch) {
+					ch = itr->second;
+				}
+
+			}
+			for (itr = words.begin(); itr != words.end(); ++itr) {
+				if (itr->second == ch) {
+					out << itr->first << ',' << itr->second << '\n';
+					ch++;
+				}
 			}
 		}
 	}
