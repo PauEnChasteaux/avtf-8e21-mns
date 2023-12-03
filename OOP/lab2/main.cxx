@@ -30,7 +30,6 @@ int main(int argc, char** argv)
 {
     Lines s1{};
     Lines s2{};
-    std::string fName;
     setlocale(LC_ALL, "Russian");
     std::cout << "Что бы ввести строку нажмите 1 \n";
     std::cout << "Что бы найти подстроку в строке нажмите 2 \n";
@@ -42,29 +41,63 @@ int main(int argc, char** argv)
         switch (n) {
         case 1:
         {
-            int c1 = 1;
+            int c1 = 0;
             std::cout << "Если хотите ввести строку вручную введите 1 \n" <<"Если хотите подгрузить строку из файла введите 2 \n" ;
             std::cin >> c1;
             if (c1 == 1) {
                 std::cout << "Введите строку: \n";
-                std::string s;std::getline(std::cin, s);
-                Lines ss(s,0);s1 = ss;
+                std::string str;std::getline(std::cin, str);
+                Lines tempLine(str,1);
+                s1 = tempLine;
+                break;
             }
             if (c1 == 2) {
                 std::cout << "Введите название файла: ";
-                std::string s;std::getline(std::cin, s);
-                Lines ss(s,1);s1 = ss;
+                std::string fStr="text.txt";
+                //std::getline(std::cin, fStr);
+                std::cout<<'\n'<<fStr<<'\n';
+                Lines tempLine(fStr,2);
+                s1 = tempLine;
+                break;
             }
+            std::cout<< "Попробуйте ещё раз. \n";
         };
         break;
         case 2:
-            std::cout << s1.wrldCount();
+        {
+			std::cout<<"Введите искомую подстроку: \n";
+			std::string str;std::getline(std::cin, str);
+            std::cout << s1.substring(str) << '\n';
+        };
+        break;
         case 3:
+        {
+			std::cout<<"Если хотите выгрузить расспределение в txt-файл нажмите 1 \n" 
+			         <<"Если хотите выгрузить расспределение в csv-файл нажмите 2 \n" ;
+			std::cout << "Введите название файла выгрузки: \n";
+            std::string str;std::getline(std::cin, str);
+			int c1 = 0;
+			std::cin >> c1;
+            if (c1 == 1) {
+                s1.outInTextFile(str);
+                break;
+            }
+            if (c1 == 2) {
+                s1.outInCSVFile(str);
+                break;
+            }
+            std::cout<< "Попробуйте ещё раз. \n";
+		};
+		break;
+		case 4:
+        {
+			std::cout << s1.wrldCount() << '\n';
+        };
         default:
             continue;
             break;
         }
-    } while (n != 0);
+    } while (n != 999);
     std::cout << "Программма завершена успешно. \n";
 
 
