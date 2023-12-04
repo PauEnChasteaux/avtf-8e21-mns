@@ -21,12 +21,13 @@
  *
  */
 
-
+#pragma once
 #ifndef LINES_HPP
 #define LINES_HPP
 
 #include <string>
 #include <map>
+#include <vector>
 
 class Lines
 {
@@ -35,20 +36,25 @@ public:
 	Lines(std::string str, int check);
 
 	std::string get();
+	Lines& operator=(const Lines& lines);
+	void sortByLetter();
+	void sortByWrldOrder();
+	void sortByNumOfOccur();
+
 	/*friend std::ostream& operator<<(std::ostream& out, const Lines& l1);*/
 
 	int substring(std::string s);
-
 	int wrldCount();
 
-	void outInTextFile(std::string s,int n);
-	void outInCSVFile(std::string s,int n);
+	void outInTextFile(std::string s, int n);
+	void outInCSVFile(std::string s, int n);
 
 	virtual ~Lines();
 
 private:
 	std::string line;
-	std::map<std::string, int > words;
+	std::vector<std::pair<std::string, int>> words;
+	//std::map<std::string, int > words;
 };
 
 #endif /* LINES_HPP */ 
