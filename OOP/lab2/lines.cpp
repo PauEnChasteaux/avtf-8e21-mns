@@ -107,8 +107,9 @@ void Lines::sortByLetter(){
 	for (int i = 0; i < words.size(); i++) {
 		if (words[i].first[0] != constLetter || (words[i].first[0]-32 != constLetter)) {
 			words.push_back(words[i]);
-			words.erase(words.at(i));
+			words.erase(words.begin()+i);
 		}
+		constLetter++;
 	}
 }
 
