@@ -31,7 +31,7 @@
 
 int length(std::string s) {
 	int counter = 0;
-	for (int i = 0;s[i] != '\0';i++)counter++;
+	for (int i = 0; s[i] != '\0'; i++)counter++;
 	return counter;
 }
 
@@ -59,42 +59,66 @@ Lines::Lines(std::string str, int check) {
 	}
 	//std::cout << "main Попробуйте ещё раз. \n";
 	std::string s = "";
-	for (int i = 0;line[i] != '\0';i++) {
+	for (int i = 0; line[i] != '\0'; i++) {
 		if (line[i] == ' ' && line[i + 1] == ' ')continue;
 		if ((64 < line[i] < 91) || (96 < line[i] < 123)) {
 			s += line[i];
 		}
 		bool check = 0;
 		if (line[i] == ' ' || line[i + 1] == '\0') {
-			std::map<std::string, int>::iterator itr;
-			for (auto itr = words.begin(); itr != words.end(); ++itr) {
-				if (itr->first == s) {
-					itr->second++;
+			if (words.empty())words.push_back(std::pair<std::string, int> {s, 1});
+			for (int i = 0; i < words.size(); i++) {
+				if (words[i].first == s) {
+					words[i].second++;
 					check = 1;
 					s = "";
 					break;
 				}
 				std::string ss = s;
 				ss[0] = (ss[0] > 93) ? (ss[0] - 32) : (ss[0] + 32);
-				if (itr->first == ss) {
-					itr->second++;
+				if (words[i].first == ss) {
+					words[i].second++;
 					check = 1;
 					s = "";
 					break;
 				}
-
 			}
 			if (check == 1) {
 				check = 0;
 				continue;
 			}
-			words[s] = 1;
+			words.push_back(std::pair<std::string, int> {s, 1});
 			s = "";
 		}
 	}
 }
 
 std::string Lines::get() { return line; }
+
+Lines& Lines::operator=(const Lines& l)
+{
+	this->line = l.line;
+	this->words = l.words;
+	return *this;
+}
+
+void Lines::sortByLetter(){
+	char constLetter = 'A';
+	for (int i = 0; i < words.size(); i++) {
+		if (words[i].first[0] != constLetter || (words[i].first[0]-32 != constLetter)) {
+			words.push_back(words[i]);
+			words.erase(words.at(i));
+		}
+	}
+}
+
+void Lines::sortByWrldOrder(){
+
+}
+
+void Lines::sortByNumOfOccur(){
+
+}
 
 //std::ostream& operator<<(std::ostream& out, const Lines& l1)
 //{
@@ -106,11 +130,11 @@ std::string Lines::get() { return line; }
 
 int Lines::substring(std::string s) {
 	int pos = -1;
-	for (int i = 0;this->line[i] != '\0';i++) {
+	for (int i = 0; this->line[i] != '\0'; i++) {
 		if (this->line[i] == s[0]) {
 			int currentLength = 0;
 			pos = i;
-			for (int j = 0, ij = i;s[j] != '\0';j++) {
+			for (int j = 0, ij = i; s[j] != '\0'; j++) {
 
 				currentLength = j + 1;
 				if (s[j] != this->line[ij])break;
@@ -128,7 +152,7 @@ int Lines::substring(std::string s) {
 
 int Lines::wrldCount() {
 	int counter = 0;
-	for (int i = 0;line[i] != '\0';i++) {
+	for (int i = 0; line[i] != '\0'; i++) {
 		if (line[i] == ' ' && line[i + 1] == ' ')continue;
 		if (line[i] == ' ' || line[i + 1] == '\0')counter++;
 	}
@@ -149,10 +173,9 @@ void Lines::outInTextFile(std::string str, int n) {
 			char ch = 'z';
 			int i = 0;
 			for (itr = words.begin(); itr != words.end(); ++itr) {
-				if (itr->first[0]<ch) {
+				if (itr->first[0] < ch) {
 					ch = itr->first[0];
 				}
-				
 			}
 			for (itr = words.begin(); itr != words.end(); ++itr) {
 				if (itr->first[0] == ch) {
@@ -161,7 +184,7 @@ void Lines::outInTextFile(std::string str, int n) {
 				}
 			}
 		}
-		
+
 		if (n == 2) {
 			for (itr = words.begin(); itr != words.end(); ++itr) {
 				out << '\t' << itr->first << '\t' << itr->second << '\n';
@@ -187,7 +210,7 @@ void Lines::outInTextFile(std::string str, int n) {
 	out.close();
 }
 
-void Lines::outInCSVFile(std::string str,int n) {
+void Lines::outInCSVFile(std::string str, int n) {
 	std::ofstream out(str);
 
 	if (out.is_open())
@@ -208,8 +231,7 @@ void Lines::outInCSVFile(std::string str,int n) {
 			for (itr = words.begin(); itr != words.end(); ++itr) {
 				if (itr->first[0] < ch) {
 					ch = itr->first[0];
-				}
-
+				}	
 			}
 			for (itr = words.begin(); itr != words.end(); ++itr) {
 				if (itr->first[0] == ch) {
@@ -218,7 +240,6 @@ void Lines::outInCSVFile(std::string str,int n) {
 				}
 			}
 		}
-
 		if (n == 2) {
 			for (itr = words.begin(); itr != words.end(); ++itr) {
 				out << itr->first << ',' << itr->second << '\n';
@@ -231,7 +252,6 @@ void Lines::outInCSVFile(std::string str,int n) {
 				if (itr->second < ch) {
 					ch = itr->second;
 				}
-
 			}
 			for (itr = words.begin(); itr != words.end(); ++itr) {
 				if (itr->second == ch) {
@@ -246,5 +266,7 @@ void Lines::outInCSVFile(std::string str,int n) {
 
 Lines::~Lines()
 {
+	line.clear();
+	words.clear();
 	//std::cout << "\nDestructor executed \n";
 }
