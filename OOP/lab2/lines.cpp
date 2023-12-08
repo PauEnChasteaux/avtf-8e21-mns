@@ -39,8 +39,8 @@ Lines::Lines() {
 	this->line = "";
 }
 
-Lines::Lines(std::string str, int check) {
-	if (check == 2) {
+Lines::Lines(std::string str/**, int check**/) {
+	//if (check == 2) {
 		std::ifstream in(str);
 		std::string lineFromFile;
 		if (in.is_open()) {
@@ -52,20 +52,22 @@ Lines::Lines(std::string str, int check) {
 		}
 		in.close();
 		this->line = lineFromFile;
-	}
+	//}
+	/**
 	if (check == 1) {
 		this->line = str;
 		//std::cout << " not file Попробуйте ещё раз. \n";
-	}
+	}**/
 	//std::cout << "main Попробуйте ещё раз. \n";
 	std::string s = "";
 	for (int i = 0; line[i] != '\0'; i++) {
+		if (line[i] == ' ' || line[i] == '.' || line[i] == ',')continue;
 		if (line[i] == ' ' && line[i + 1] == ' ')continue;
 		if ((64 < line[i] < 91) || (96 < line[i] < 123)) {
 			s += line[i];
 		}
 		bool check = 0;
-		if (line[i] == ' ' || line[i + 1] == '\0') {
+		if (line[i+1] == ' ' || line[i + 1] == '\0') {
 			if (words.empty())words.push_back(std::pair<std::string, int> {s, 1});
 			for (int i = 0; i < words.size(); i++) {
 				if (words[i].first == s) {
@@ -91,6 +93,7 @@ Lines::Lines(std::string str, int check) {
 			s = "";
 		}
 	}
+	words[0].second--;
 }
 
 std::string Lines::get() { return line; }
@@ -104,21 +107,56 @@ Lines& Lines::operator=(const Lines& l)
 
 void Lines::sortByLetter(){
 	char constLetter = 'A';
+	std::vector<std::pair<std::string, int>> tempWords;
 	for (int i = 0; i < words.size(); i++) {
-		if (words[i].first[0] != constLetter || (words[i].first[0]-32 != constLetter)) {
-			words.push_back(words[i]);
-			words.erase(words.begin()+i);
+		for (int j = 0; j < words.size(); j++) {
+			if (words[j].first[0] == constLetter || (words[j].first[0]-32 == constLetter)){
+				tempWords.push_back(words[j]);
+			}
 		}
 		constLetter++;
 	}
+	words=tempWords;
 }
 
 void Lines::sortByWrldOrder(){
-
+	
 }
 
-void Lines::sortByNumOfOccur(){
+void Lines::sortByNumOfOccurLtoH(){
+	int constOrder = 100000;
+	for (int i = 0; i < words.size(); i++) {
+		if (words[i].second < constOrder)  constOrder = words[i].second;
+	}
+	std::vector<std::pair<std::string, int>> tempWords;
+	for (int i = 0; i < words.size(); i++) {
+		for (int j = 0; j < words.size(); j++) {
+			if (words[j].second == constOrder){
+				tempWords.push_back(words[j]);
+				
+			}
+		}
+		constOrder++;
+	}
+	words=tempWords;
+}
 
+void Lines::sortByNumOfOccurHtoL(){
+	int constOrder = 0;
+	for (int i = 0; i < words.size(); i++) {
+		if (words[i].second > constOrder)  constOrder = words[i].second;
+	}
+	std::vector<std::pair<std::string, int>> tempWords;
+	for (int i = 0; i < words.size(); i++) {
+		for (int j = 0; j < words.size(); j++) {
+			if (words[j].second == constOrder){
+				tempWords.push_back(words[j]);
+				
+			}
+		}
+		constOrder--;
+	}
+	words=tempWords;
 }
 
 //std::ostream& operator<<(std::ostream& out, const Lines& l1)
@@ -131,25 +169,23 @@ void Lines::sortByNumOfOccur(){
 
 int Lines::substring(std::string s) {
 	int pos = -1;
+	int len = 0;
 	for (int i = 0; this->line[i] != '\0'; i++) {
 		if (this->line[i] == s[0]) {
-			int currentLength = 0;
 			pos = i;
-			for (int j = 0, ij = i; s[j] != '\0'; j++) {
-
-				currentLength = j + 1;
-				if (s[j] != this->line[ij])break;
-				ij++;
-			}
-			if (length(s) == currentLength) {
-				break;
+			for (int j=0; j<length(s); j++) {
+				if (s[j] != this->line[i+j]){
+					pos=-1;
+					len=0;
+					break;
+				}
+				len++;
 			}
 		}
+		if(len==length(s))return pos;
 	}
 	return pos;
 }
-
-
 
 int Lines::wrldCount() {
 	int counter = 0;
@@ -160,106 +196,24 @@ int Lines::wrldCount() {
 	return counter;
 }
 
-
-
-
-
-void Lines::outInTextFile(std::string str, int n) {
+void Lines::outInTextFile(std::string str) {
 	std::ofstream out(str);
-
 	if (out.is_open())
 	{
-		std::map<std::string, int>::iterator itr;
-		if (n == 1) {
-			char ch = 'z';
-			int i = 0;
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				if (itr->first[0] < ch) {
-					ch = itr->first[0];
-				}
-			}
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				if (itr->first[0] == ch) {
-					out << '\t' << itr->first << '\t' << itr->second << '\n';
-					ch++;
-				}
-			}
-		}
-
-		if (n == 2) {
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				out << '\t' << itr->first << '\t' << itr->second << '\n';
-			}
-		}
-		if (n == 3) {
-			int ch = 1000;
-			int i = 0;
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				if (itr->second < ch) {
-					ch = itr->second;
-				}
-
-			}
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				if (itr->second == ch) {
-					out << '\t' << itr->first << '\t' << itr->second << '\n';
-					ch++;
-				}
-			}
+		for(int i=0;i<words.size();i++){
+			out<<words[i].first<< " "<< words[i].second<<'\n';
 		}
 	}
 	out.close();
 }
 
-void Lines::outInCSVFile(std::string str, int n) {
+void Lines::outInCSVFile(std::string str) {
 	std::ofstream out(str);
 
 	if (out.is_open())
 	{
-		/*if (out.is_open())
-		{
-			std::map<std::string, int>::iterator itr;
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				out << itr->first << ',' << itr->second << '\n';
-			}
-		}*/
-
-
-		std::map<std::string, int>::iterator itr;
-		if (n == 1) {
-			char ch = 'z';
-			int i = 0;
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				if (itr->first[0] < ch) {
-					ch = itr->first[0];
-				}	
-			}
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				if (itr->first[0] == ch) {
-					out << itr->first << ',' << itr->second << '\n';
-					ch++;
-				}
-			}
-		}
-		if (n == 2) {
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				out << itr->first << ',' << itr->second << '\n';
-			}
-		}
-		if (n == 3) {
-			int ch = 1000;
-			int i = 0;
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				if (itr->second < ch) {
-					ch = itr->second;
-				}
-			}
-			for (itr = words.begin(); itr != words.end(); ++itr) {
-				if (itr->second == ch) {
-					out << itr->first << ',' << itr->second << '\n';
-					ch++;
-				}
-			}
+		for(int i=0;i<words.size();i++){
+			out<<words[i].first<< ","<< words[i].second<<'\n';
 		}
 	}
 	out.close();
