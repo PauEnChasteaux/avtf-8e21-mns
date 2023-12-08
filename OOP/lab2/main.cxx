@@ -42,55 +42,43 @@ int main(int argc, char** argv)
         switch (n) {
         case 1:
         {
-            int c1 = 0;
-            std::cout << "Если хотите ввести строку вручную введите 1 \n" << "Если хотите подгрузить строку из файла введите 2 \n";
-            std::cin >> c1;
-            if (c1 == 1) {
-                std::cout << "Введите строку: \n";
-                std::string str; std::getline(std::cin, str);
-                Lines tempLine(str, 1);
-                s1 = tempLine;
-                break;
-            }
-            if (c1 == 2) {
-                std::cout << "Введите название файла: ";
-                std::string fStr;// = "text.txt";
-                std::getline(std::cin, fStr);
-                //std::cout << '\n' << fStr << '\n';
-                Lines tempLine(fStr, 2);
-                s1 = tempLine;
-                break;
-            }
-            std::cout << "Попробуйте ещё раз. \n";
+			std::cout << "Введите название файла: ";
+			std::string fStr; std::cin >> fStr;
+			Lines tempLine(fStr/**, 2**/);
+			s1 = tempLine;
         };
         break;
         case 2:
         {
             std::cout << "Введите искомую подстроку: \n";
-            std::string str; std::getline(std::cin, str);
+            std::string str; std::cin>>str;
             std::cout << s1.substring(str) << '\n';
         };
         break;
         case 3:
         {
+			int c1 = 0;
             std::cout << "Порядок слов в отображаемом результате может быть: \n"
                 << "1. Алфавитный.\n"
                 << "2. По порядку слов в тексте.\n"
-                << "3. По количеству вхождений.\n"
+                << "3. По количеству вхождений: от большего к меньшему.\n"
+                << "4. По количеству вхождений: от меньшего к большему.\n"
                 << "Выберите желаемый порядок: ";
-            int porydok; std::cin >> porydok;
-            std::cout << "Если хотите выгрузить расспределение в txt-файл нажмите 1 \n"
-                << "Если хотите выгрузить расспределение в csv-файл нажмите 2 \n";
-            std::cout << "Введите название файла выгрузки: \n";
-            std::string str; std::getline(std::cin, str);
-            int c1 = 0;
             std::cin >> c1;
             if (c1 == 1) {
-                s1.outInTextFile(str, porydok);
+                s1.sortByLetter();
                 break;
             }
             if (c1 == 2) {
-                s1.outInCSVFile(str, porydok);
+                s1.sortByWrldOrder();
+                break;
+            }
+            if (c1 == 3) {
+                s1.sortByNumOfOccurHtoL();
+                break;
+            }
+            if (c1 == 4) {
+                s1.sortByNumOfOccurLtoH();
                 break;
             }
             std::cout << "Попробуйте ещё раз. \n";
@@ -100,11 +88,32 @@ int main(int argc, char** argv)
         {
             std::cout << s1.wrldCount() << '\n';
         };
+        break;
+        case 5:
+        {
+			int c1 = 0;
+            std::cout << "Если хотите выгрузить расспределение в txt-файл нажмите 1 \n"
+                << "Если хотите выгрузить расспределение в csv-файл нажмите 2 \n";
+            std::cin >> c1;
+            std::cout << "Введите название файла выгрузки: \n";
+            
+            std::string str; std::cin>>str;
+            if (c1 == 1) {
+                s1.outInTextFile(str);
+                break;
+            }
+            if (c1 == 2) {
+                s1.outInCSVFile(str);
+                break;
+            }
+            std::cout << "Попробуйте ещё раз. \n";
+        };
+        break;
         default:
             continue;
             break;
         }
-    } while (n != 999);
+    } while (n != 0);
     std::cout << "Программма завершена успешно. \n";
 
 
