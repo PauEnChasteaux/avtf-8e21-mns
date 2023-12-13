@@ -33,22 +33,24 @@ class Lines
 public:
 	Lines();
 	Lines(std::string str/**, int check**/);
+	Lines(std::string str, bool b);
 
+	Lines(std::string line, std::vector<std::pair<std::string, int>> words);
 	std::string get();
 	Lines& operator=(const Lines& lines);
-	void sortByLetter();
-	void sortByWrldOrder();
-	void sortByNumOfOccurHtoL();
-	void sortByNumOfOccurLtoH();
+	Lines sortByLetter();
+	Lines sortByWrldOrder();
+	Lines sortByNumOfOccurHtoL();
+	Lines sortByNumOfOccurLtoH();
 
-	/*friend std::ostream& operator<<(std::ostream& out, const Lines& l1);*/
+	friend Lines operator+(const Lines& c1, const Lines& c2);
 
-	int substring(std::string s);
+	int substring(Lines s);
 	int wrldCount();
 
 	void outInTextFile(std::string s);
 	void outInCSVFile(std::string s);
-	
+
 	virtual ~Lines();
 
 private:
