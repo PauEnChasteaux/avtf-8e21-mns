@@ -23,7 +23,7 @@
 
 
 #include <iostream>
-#include "lines.hpp"
+#include "lines.h"
 #include <string>
 
 int main(int argc, char** argv)
@@ -31,33 +31,36 @@ int main(int argc, char** argv)
     Lines s1{};
     Lines s2{};
     char ch = ' ';
+    std::string fStr;
     setlocale(LC_ALL, "Russian");
     std::cout << "Что бы ввести строку нажмите 1 \n";
     std::cout << "Что бы найти подстроку в строке нажмите 2 \n";
     std::cout << "Что бы распределить строку по количеству уникальных строк нажмите 3 \n";
     std::cout << "Что бы подсчитать количество слов в строке нажмите 4 \n";
+    std::cout << "Что бы вывести распределение слов в строке нажмите 5 \n";
+    std::cout << "+ 6 \n";
     int n;
     do {
         std::cin >> n;
         switch (n) {
         case 1:
         {
-			std::cout << "Введите название файла: ";
-			std::string fStr; std::cin >> fStr;
-			Lines tempLine(fStr/**, 2**/);
-			s1 = tempLine;
+            std::cout << "Введите название файла: ";
+            std::cin >> fStr;
+            Lines tempLine(fStr/**, 2**/);
+            s1 = tempLine;
         };
         break;
         case 2:
         {
             std::cout << "Введите искомую подстроку: \n";
-            std::string str; std::cin>>str;
+            std::string str; std::cin >> str;
             std::cout << s1.substring(str) << '\n';
         };
         break;
         case 3:
         {
-			int c1 = 0;
+            int c1 = 0;
             std::cout << "Порядок слов в отображаемом результате может быть: \n"
                 << "1. Алфавитный.\n"
                 << "2. По порядку слов в тексте.\n"
@@ -66,19 +69,21 @@ int main(int argc, char** argv)
                 << "Выберите желаемый порядок: ";
             std::cin >> c1;
             if (c1 == 1) {
-                s1.sortByLetter();
+                s1=s1.sortByLetter();
                 break;
             }
             if (c1 == 2) {
                 s1.sortByWrldOrder();
+                Lines tempLine(fStr/**, 2**/);
+                s1 = tempLine;
                 break;
             }
             if (c1 == 3) {
-                s1.sortByNumOfOccurHtoL();
+                s1=s1.sortByNumOfOccurHtoL();
                 break;
             }
             if (c1 == 4) {
-                s1.sortByNumOfOccurLtoH();
+                s1=s1.sortByNumOfOccurLtoH();
                 break;
             }
             std::cout << "Попробуйте ещё раз. \n";
@@ -91,13 +96,13 @@ int main(int argc, char** argv)
         break;
         case 5:
         {
-			int c1 = 0;
+            int c1 = 0;
             std::cout << "Если хотите выгрузить расспределение в txt-файл нажмите 1 \n"
                 << "Если хотите выгрузить расспределение в csv-файл нажмите 2 \n";
             std::cin >> c1;
             std::cout << "Введите название файла выгрузки: \n";
-            
-            std::string str; std::cin>>str;
+
+            std::string str; std::cin >> str;
             if (c1 == 1) {
                 s1.outInTextFile(str);
                 break;
@@ -108,6 +113,17 @@ int main(int argc, char** argv)
             }
             std::cout << "Попробуйте ещё раз. \n";
         };
+        case 6:
+        {
+            std::cout << "Введите название файла: ";
+            std::string fStr1;
+            std::cin >> fStr1;
+            Lines tempLine(fStr1/**, 2**/);
+            s2 = tempLine;
+            Lines tempLine1(s1+s2);
+            std::cout << tempLine1.get() << '\n';
+        };
+        break;
         break;
         default:
             continue;
