@@ -22,7 +22,7 @@
  */
 
 
-#include "lines.hpp"
+#include "lines.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -41,17 +41,17 @@ Lines::Lines() {
 
 Lines::Lines(std::string str/**, int check**/) {
 	//if (check == 2) {
-		std::ifstream in(str);
-		std::string lineFromFile;
-		if (in.is_open()) {
-			std::getline(in, lineFromFile);
-			//std::cout << "file Попробуйте ещё раз. \n";
-		}
-		else {
-			std::cout << "Попробуйте ещё раз. \n";
-		}
-		in.close();
-		this->line = lineFromFile;
+	std::ifstream in(str);
+	std::string lineFromFile;
+	if (in.is_open()) {
+		std::getline(in, lineFromFile);
+		//std::cout << "file Попробуйте ещё раз. \n";
+	}
+	else {
+		std::cout << "Попробуйте ещё раз. \n";
+	}
+	in.close();
+	this->line = lineFromFile;
 	//}
 	/**
 	if (check == 1) {
@@ -67,7 +67,7 @@ Lines::Lines(std::string str/**, int check**/) {
 			s += line[i];
 		}
 		bool check = 0;
-		if (line[i+1] == ' ' || line[i + 1] == '\0') {
+		if (line[i + 1] == ' ' || line[i + 1] == '\0') {
 			if (words.empty())words.push_back(std::pair<std::string, int> {s, 1});
 			for (int i = 0; i < words.size(); i++) {
 				if (words[i].first == s) {
@@ -96,6 +96,15 @@ Lines::Lines(std::string str/**, int check**/) {
 	words[0].second--;
 }
 
+Lines::Lines(std::string str, bool b){
+	this->line = str;;
+}
+
+Lines::Lines(std::string line, std::vector<std::pair<std::string, int>> words){
+	this->line = line;
+	this-> words = words;
+}
+
 std::string Lines::get() { return line; }
 
 Lines& Lines::operator=(const Lines& l)
@@ -105,25 +114,28 @@ Lines& Lines::operator=(const Lines& l)
 	return *this;
 }
 
-void Lines::sortByLetter(){
+Lines Lines::sortByLetter() {
 	char constLetter = 'A';
 	std::vector<std::pair<std::string, int>> tempWords;
 	for (int i = 0; i < words.size(); i++) {
 		for (int j = 0; j < words.size(); j++) {
-			if (words[j].first[0] == constLetter || (words[j].first[0]-32 == constLetter)){
+			if (words[j].first[0] == constLetter || (words[j].first[0] - 32 == constLetter)) {
 				tempWords.push_back(words[j]);
 			}
 		}
 		constLetter++;
 	}
-	words=tempWords;
+	//words = tempWords;
+	Lines temp(line, tempWords);
+	return temp;
 }
 
-void Lines::sortByWrldOrder(){
-	
+Lines Lines::sortByWrldOrder() {
+	Lines temp;
+	return temp;
 }
 
-void Lines::sortByNumOfOccurLtoH(){
+Lines Lines::sortByNumOfOccurLtoH() {
 	int constOrder = 100000;
 	for (int i = 0; i < words.size(); i++) {
 		if (words[i].second < constOrder)  constOrder = words[i].second;
@@ -131,17 +143,20 @@ void Lines::sortByNumOfOccurLtoH(){
 	std::vector<std::pair<std::string, int>> tempWords;
 	for (int i = 0; i < words.size(); i++) {
 		for (int j = 0; j < words.size(); j++) {
-			if (words[j].second == constOrder){
+			if (words[j].second == constOrder) {
 				tempWords.push_back(words[j]);
-				
+
 			}
 		}
 		constOrder++;
 	}
-	words=tempWords;
+	//words = tempWords;
+	Lines temp(line, tempWords);
+	return temp;
+	
 }
 
-void Lines::sortByNumOfOccurHtoL(){
+Lines Lines::sortByNumOfOccurHtoL() {
 	int constOrder = 0;
 	for (int i = 0; i < words.size(); i++) {
 		if (words[i].second > constOrder)  constOrder = words[i].second;
@@ -149,14 +164,16 @@ void Lines::sortByNumOfOccurHtoL(){
 	std::vector<std::pair<std::string, int>> tempWords;
 	for (int i = 0; i < words.size(); i++) {
 		for (int j = 0; j < words.size(); j++) {
-			if (words[j].second == constOrder){
+			if (words[j].second == constOrder) {
 				tempWords.push_back(words[j]);
-				
+
 			}
 		}
 		constOrder--;
 	}
-	words=tempWords;
+	//words = tempWords;
+	Lines temp(line,tempWords);
+	return temp;
 }
 
 //std::ostream& operator<<(std::ostream& out, const Lines& l1)
@@ -167,22 +184,23 @@ void Lines::sortByNumOfOccurHtoL(){
 //	}
 //}
 
-int Lines::substring(std::string s) {
+int Lines::substring(Lines str) {
 	int pos = -1;
 	int len = 0;
+	std::string s = str.get();
 	for (int i = 0; this->line[i] != '\0'; i++) {
 		if (this->line[i] == s[0]) {
 			pos = i;
-			for (int j=0; j<length(s); j++) {
-				if (s[j] != this->line[i+j]){
-					pos=-1;
-					len=0;
+			for (int j = 0; j < length(s); j++) {
+				if (s[j] != this->line[i + j]) {
+					pos = -1;
+					len = 0;
 					break;
 				}
 				len++;
 			}
 		}
-		if(len==length(s))return pos;
+		if (len == length(s))return pos;
 	}
 	return pos;
 }
@@ -200,8 +218,8 @@ void Lines::outInTextFile(std::string str) {
 	std::ofstream out(str);
 	if (out.is_open())
 	{
-		for(int i=0;i<words.size();i++){
-			out<<words[i].first<< " "<< words[i].second<<'\n';
+		for (int i = 0; i < words.size(); i++) {
+			out << words[i].first << " " << words[i].second << '\n';
 		}
 	}
 	out.close();
@@ -212,8 +230,8 @@ void Lines::outInCSVFile(std::string str) {
 
 	if (out.is_open())
 	{
-		for(int i=0;i<words.size();i++){
-			out<<words[i].first<< ","<< words[i].second<<'\n';
+		for (int i = 0; i < words.size(); i++) {
+			out << words[i].first << "," << words[i].second << '\n';
 		}
 	}
 	out.close();
@@ -224,4 +242,10 @@ Lines::~Lines()
 	line.clear();
 	words.clear();
 	//std::cout << "\nDestructor executed \n";
+}
+
+Lines operator+(const Lines& c1, const Lines& c2)
+{
+
+	return Lines(c1.line+c2.line,c1.words);
 }
