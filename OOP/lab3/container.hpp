@@ -5,30 +5,30 @@
 #include <string>
 #include <vector>
 
-class container{
-
+class Container{
+public:
+	Container();
+	~Container();
 };
 
-class List {
-	class Node {
-		Node* head;
-		int size;
-	public:
+class List:public Container {
+    struct Node{
 		Node* pNext;
 		int data;
-		Node();
-		Node(int data, Node* pNext = nullptr);
+    };
+    Node* head = nullptr;
+    int size;
+	public:
+
+		List();
+        //List(int data);
+		List(int data, Node* pNext = nullptr);
 
 		// Node& operator=(const Node& node);
 
-		void push(int data, Node** head_ref);
-		void print(Node* node);
+		void push(int num);
+		void print();
 	};
-	Node* head;
-	int size;
-public:
-	List();
-	~List();
-};
+
 
 #endif /* CONTAINER_HPP */
