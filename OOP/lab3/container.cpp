@@ -3,21 +3,25 @@
 #include <fstream>
 #include <string>
 
+Container::Container(){}
+
+Container::~Container(){}
+
 List::List(){
-    this->head=nullptr;
-}
-
-List::~List(){
-}
-
-List::Node::Node(){
-    this->data=0;
-    this->pNext=nullptr;
+    this->head->data=0;
+    this->head->pNext=nullptr;
     size++;
 }
-List::Node::Node(int data, Node* pNext){
-    this->data=data;
-    this->pNext=pNext;
+
+// List::List(int data){
+//     this->head->data=data;
+//     this->head->pNext=nullptr;
+//     size++;
+// }
+
+List::List(int data, Node* pNext){
+    this->head->data=data;
+    this->head->pNext=pNext;
     size++;
 }
 
@@ -27,18 +31,21 @@ List::Node::Node(int data, Node* pNext){
 //     return this;
 // }
 
-void List::Node::push(int data,Node** head_ref)
-{
+void List::push(int num){
+    Node* new_node = new Node();
+	new_node->data = num;
+	new_node->pNext = (head);
+	head = new_node;
 	//Node* new_node = new Node();
-    Node new_node(data,*head_ref);
-	(*head_ref) = &new_node;
+    //List new_node(num);
+	// this->head->pNext = *new_node;
     size++;
 }
 
-void List::Node::print(Node* node){
-    while (pNext != nullptr) {
-		std::cout << node->data << " ";
-		node = node->pNext;
+void List::print(){
+    while (head->pNext != nullptr) {
+		std::cout << head->data << " ";
+		this->head->pNext = head->pNext;
 	}
 	std::cout << '\n';
 }
