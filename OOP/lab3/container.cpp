@@ -3,49 +3,67 @@
 #include <fstream>
 #include <string>
 
-Container::Container(){}
-
-Container::~Container(){}
-
-List::List(){
-    this->head->data=0;
-    this->head->pNext=nullptr;
-    size++;
+Container::Container() {
+    this->size = 0;
 }
 
-// List::List(int data){
-//     this->head->data=data;
-//     this->head->pNext=nullptr;
-//     size++;
-// }
-
-List::List(int data, Node* pNext){
-    this->head->data=data;
-    this->head->pNext=pNext;
-    size++;
+int Container::getSize(){
+    return size;
 }
 
-// Node& List::Node=(const Node& node){
-//     this->data=node.data;
-//     this->pNext=node.pNext;
-//     return this;
-// }
+Container::~Container() {}
 
-void List::push(int num){
+List::List() {
     Node* new_node = new Node();
-	new_node->data = num;
-	new_node->pNext = (head);
-	head = new_node;
-	//Node* new_node = new Node();
-    //List new_node(num);
-	// this->head->pNext = *new_node;
-    size++;
+    new_node->data = 0;
+    new_node->pNext = (head);
+    head = new_node;
 }
 
-void List::print(){
-    while (head->pNext != nullptr) {
-		std::cout << head->data << " ";
-		this->head->pNext = head->pNext;
-	}
-	std::cout << '\n';
+List::List(int data, Node* pNext) {
+    Node* new_node = new Node();
+    new_node->data = data;
+    new_node->pNext = (head);
+    head = new_node;
+}
+
+void List::push(int num) {
+    Node* new_node = new Node();
+    new_node->data = num;
+    new_node->pNext = (head);
+    head = new_node;
+    this->size++;
+}
+
+void List::del(int pos){
+    if (0<=pos<size) {
+        return;
+    }
+    if (this->head == nullptr)
+        return;
+    Node* temp = head;
+    if (pos == 0) {
+        head = temp->pNext;
+        free(temp);
+        size--;
+        return;
+    }
+    for (int i = 0; temp != nullptr && i < pos; i++)
+        temp = temp->pNext;
+    if (temp == nullptr || temp->pNext == nullptr)
+        return;
+    Node* next = temp->pNext->pNext;
+    free(temp->pNext);
+    temp->pNext = next;
+    head = temp;
+    size--;
+}
+
+void List::print() {
+    Node* temp = head;
+    while (temp->pNext != nullptr) {
+        std::cout << temp->data << " ";
+        temp = temp->pNext;
+    }
+    std::cout << '\n';
 }
