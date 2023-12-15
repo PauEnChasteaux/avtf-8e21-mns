@@ -2,25 +2,31 @@
 #include "container.hpp"
 #include <string>
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
     int ch;
     List list;
     do {
-        std::cin>>ch;
+        std::cin >> ch;
         switch (ch) {
-            case 1: list.print();;
+        case 1:
+            int data; std::cin >> data;
+            list.push(data);
             break;
-            // case 2: list.deleteNode(&head,posFind(head));
-            // break;
-            case 3:
-				int data;std::cin>>data;
-				list.push(data);
+        case 2: 
+            int pos; std::cin >> pos;
+            list.del(pos);
             break;
-            case 0: std::cout<<"Exit\n";
+        case 3:
+            list.print();;
             break;
-            default: std::cout<<"Ha-ha \n";
+        case 4:
+            std::cout<<list.getSize()<<'\n';
+            break;
+        case 0: std::cout << "Exit\n";
+            break;
+        default: std::cout << "Ha-ha \n";
         }
-    } while(ch!=0);
+    } while (ch != 0);
 
     return 0;
 }
