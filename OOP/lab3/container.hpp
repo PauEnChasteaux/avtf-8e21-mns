@@ -6,10 +6,10 @@
 #include <vector>
 
 class Container {
-	
+
 public:
 	int size;
-
+	
 	Container();
 
 	int getSize();
@@ -26,15 +26,41 @@ class List :public Container {
 public:
 
 	List();
-	//List(int data);
 	List(int data, Node* pNext = nullptr);
 
-	// Node& operator=(const Node& node);
+	List(const List& m1);
+	List& operator=(const List& m1);
 
 	void push(int num);
 	void del(int pos);
-	void print();
-};	
 
+	int getData(int pos);
+	void printAll();
 
+	~List();
+};
+
+class dList :public Container {
+	struct Node {
+		Node* pNext;
+		Node* pPrev;
+		int data;
+	};
+	Node* head = nullptr;
+
+public:
+	dList();
+	dList(int data, Node* pNext = nullptr);
+
+	dList(const dList& m1);
+	dList& operator=(const dList& m1);
+
+	void push(int num);
+	void del(int pos);
+
+	int getData(int pos);
+	void printAll();
+
+	~dList();
+};
 #endif /* CONTAINER_HPP */
