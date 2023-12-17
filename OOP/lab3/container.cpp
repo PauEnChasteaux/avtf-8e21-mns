@@ -7,7 +7,7 @@ Container::Container() {
     this->size = 0;
 }
 
-int Container::getSize(){
+int Container::getSize() {
     return size;
 }
 
@@ -15,55 +15,139 @@ Container::~Container() {}
 
 List::List() {
     Node* new_node = new Node();
-    new_node->data = 0;
-    new_node->pNext = (head);
+    new_node->pNext = nullptr;
     head = new_node;
 }
 
 List::List(int data, Node* pNext) {
     Node* new_node = new Node();
     new_node->data = data;
-    new_node->pNext = (head);
+    new_node->pNext = nullptr;
     head = new_node;
+}
+
+List::List(const List& m1){
+    this->head = m1.head;
+}
+
+List& List::operator=(const List& m1){
+    this->head = m1.head;
+    return *this;
 }
 
 void List::push(int num) {
     Node* new_node = new Node();
     new_node->data = num;
-    new_node->pNext = (head);
-    head = new_node;
+    Node* temp = head;
+    while(temp->pNext!=nullptr)
+        temp = temp->pNext;
+    temp->pNext = new_node;
+    temp->pNext->pNext = nullptr;
     this->size++;
 }
 
-void List::del(int pos){
-    if (0<=pos<size) {
-        return;
-    }
+void List::del(int pos) {
     if (this->head == nullptr)
         return;
     Node* temp = head;
-    if (pos == 0) {
-        head = temp->pNext;
-        free(temp);
-        size--;
-        return;
-    }
-    for (int i = 0; temp != nullptr && i < pos; i++)
+    for (int i = 0; i < pos; i++)
         temp = temp->pNext;
-    if (temp == nullptr || temp->pNext == nullptr)
-        return;
-    Node* next = temp->pNext->pNext;
-    free(temp->pNext);
-    temp->pNext = next;
-    head = temp;
+        
+    Node* del = temp->pNext;
+    temp->pNext = temp->pNext->pNext;
+    free(del);
     size--;
 }
 
-void List::print() {
+int List::getData(int pos) {
+    Node* temp = head;
+    int num = 0;
+    for (int i = 0; i <= pos; i++)
+        temp = temp->pNext;
+    return temp->data;
+}
+
+void List::printAll() {
     Node* temp = head;
     while (temp->pNext != nullptr) {
-        std::cout << temp->data << " ";
+        std::cout << temp->pNext->data << " ";
         temp = temp->pNext;
     }
     std::cout << '\n';
+}
+
+List::~List(){
+    free(head);
+}
+
+dList::dList(){
+    Node* new_node = new Node();
+    new_node->pNext = nullptr;
+    new_node->pPrev = nullptr;
+    head = new_node;
+}
+
+dList::dList(int data, Node* pNext){
+    Node* new_node = new Node();
+    new_node->data = data;
+    new_node->pNext = nullptr;
+    new_node->pPrev = nullptr;
+    head = new_node;
+}
+
+dList::dList(const dList& m1){
+    this->head = m1.head;
+}
+
+dList& dList::operator=(const dList& m1){
+    this->head = m1.head;
+    return *this;
+}
+
+void dList::push(int num){
+    Node* new_node = new Node();
+    new_node->data = num;
+    Node* temp = head;
+    while (temp->pNext != nullptr)
+        temp = temp->pNext;
+    temp->pNext = new_node;
+    new_node->pPrev = temp;
+    temp->pNext->pNext = nullptr;
+    this->size++;
+}
+
+void dList::del(int pos){
+    if (this->head == nullptr)
+        return;
+    Node* temp = head;
+    for (int i = 0; i < pos; i++)
+        temp = temp->pNext;
+
+    Node* del = temp->pNext;
+    temp->pNext = temp->pNext->pNext;
+    temp->pNext->pPrev=temp;
+    free(del);
+    size--;
+}
+
+int dList::getData(int pos){
+    Node* temp = head;
+    int num = 0;
+    for (int i = 0; i <= pos; i++)
+        temp = temp->pNext;
+    return temp->data;
+    return 0;
+}
+
+void dList::printAll(){
+    Node* temp = head;
+    while (temp->pNext != nullptr) {
+        std::cout << temp->pNext->data << " ";
+        temp = temp->pNext;
+    }
+    std::cout << '\n';
+}
+
+dList::~dList(){
+    free(head);
 }
