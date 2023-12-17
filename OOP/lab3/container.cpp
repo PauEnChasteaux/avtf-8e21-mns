@@ -1,17 +1,11 @@
 #include "container.hpp"
+#include "list.hpp"
+#include "dlist.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
 
-Container::Container() {
-    this->size = 0;
-}
 
-int Container::getSize() {
-    return size;
-}
-
-Container::~Container() {}
 
 List::List() {
     Node* new_node = new Node();
@@ -43,7 +37,18 @@ void List::push(int num) {
         temp = temp->pNext;
     temp->pNext = new_node;
     temp->pNext->pNext = nullptr;
-    this->size++;
+    size++;
+}
+
+void List::insert(int pos, int data){
+    Node* new_node = new Node();
+    new_node->data = data;
+    Node* temp = head;
+    for (int i = 0; i < pos; i++)
+        temp = temp->pNext;
+    new_node->pNext=temp->pNext;
+    temp->pNext = new_node;
+    size++;
 }
 
 void List::del(int pos) {
@@ -52,7 +57,7 @@ void List::del(int pos) {
     Node* temp = head;
     for (int i = 0; i < pos; i++)
         temp = temp->pNext;
-        
+
     Node* del = temp->pNext;
     temp->pNext = temp->pNext->pNext;
     free(del);
@@ -67,6 +72,10 @@ int List::getData(int pos) {
     return temp->data;
 }
 
+int List::getSize() {
+    return size;
+}
+
 void List::printAll() {
     Node* temp = head;
     while (temp->pNext != nullptr) {
@@ -78,6 +87,10 @@ void List::printAll() {
 
 List::~List(){
     free(head);
+}
+
+int dList::getSize() {
+    return size;
 }
 
 dList::dList(){
@@ -110,10 +123,25 @@ void dList::push(int num){
     Node* temp = head;
     while (temp->pNext != nullptr)
         temp = temp->pNext;
+
     temp->pNext = new_node;
     new_node->pPrev = temp;
     temp->pNext->pNext = nullptr;
-    this->size++;
+    size++;
+}
+
+void dList::insert(int pos, int data){
+    Node* new_node = new Node();
+    new_node->data = data;
+    Node* temp = head;
+    for (int i = 0; i < pos; i++)
+        temp = temp->pNext;
+
+    new_node->pNext=temp->pNext;
+    new_node->pPrev=temp;
+    temp->pNext->pPrev=new_node;
+    temp->pNext = new_node;
+    size++;
 }
 
 void dList::del(int pos){
@@ -124,6 +152,7 @@ void dList::del(int pos){
         temp = temp->pNext;
 
     Node* del = temp->pNext;
+
     temp->pNext = temp->pNext->pNext;
     temp->pNext->pPrev=temp;
     free(del);
