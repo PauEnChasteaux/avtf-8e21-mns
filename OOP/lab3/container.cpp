@@ -20,35 +20,57 @@ List::List(int data, Node* pNext) {
     head = new_node;
 }
 
-List::List(const List& m1){
+List::List(const List& m1) {
     this->head = m1.head;
 }
 
-List& List::operator=(const List& m1){
+List& List::operator=(const List& m1) {
     this->head = m1.head;
     return *this;
+}
+
+int& List::operator[]( int pos)const
+{
+    Node* temp = head;
+    int num = 0;
+    for (int i = 0; i <= pos; i++)
+        temp = temp->pNext;
+    return temp->data;
 }
 
 void List::push(int num) {
     Node* new_node = new Node();
     new_node->data = num;
     Node* temp = head;
-    while(temp->pNext!=nullptr)
+    while (temp->pNext != nullptr)
         temp = temp->pNext;
     temp->pNext = new_node;
     temp->pNext->pNext = nullptr;
     size++;
 }
 
-void List::insert(int pos, int data){
+void List::insert(int pos, int data) {
     Node* new_node = new Node();
     new_node->data = data;
     Node* temp = head;
     for (int i = 0; i < pos; i++)
         temp = temp->pNext;
-    new_node->pNext=temp->pNext;
+    new_node->pNext = temp->pNext;
     temp->pNext = new_node;
     size++;
+}
+
+void List::megaInsert(int pos, List* list){
+    Node* temp = head;
+    Node* list1 = list->head;
+    Node* tlist = list->head;
+
+    for (int i = 0; temp->pNext==nullptr; i++)
+        tlist = temp->pNext;
+    for (int i = 0; i < pos; i++)
+        temp = temp->pNext;
+    tlist->pNext = temp->pNext;
+    temp->pNext = list1;
 }
 
 void List::del(int pos) {
@@ -85,7 +107,7 @@ void List::printAll() {
     std::cout << '\n';
 }
 
-List::~List(){
+List::~List() {
     free(head);
 }
 
@@ -93,14 +115,14 @@ int dList::getSize() {
     return size;
 }
 
-dList::dList(){
+dList::dList() {
     Node* new_node = new Node();
     new_node->pNext = nullptr;
     new_node->pPrev = nullptr;
     head = new_node;
 }
 
-dList::dList(int data, Node* pNext){
+dList::dList(int data, Node* pNext) {
     Node* new_node = new Node();
     new_node->data = data;
     new_node->pNext = nullptr;
@@ -108,16 +130,25 @@ dList::dList(int data, Node* pNext){
     head = new_node;
 }
 
-dList::dList(const dList& m1){
+dList::dList(const dList& m1) {
     this->head = m1.head;
 }
 
-dList& dList::operator=(const dList& m1){
+dList& dList::operator=(const dList& m1) {
     this->head = m1.head;
     return *this;
 }
 
-void dList::push(int num){
+int& dList::operator[](int pos)const
+{
+    Node* temp = head;
+    int num = 0;
+    for (int i = 0; i <= pos; i++)
+        temp = temp->pNext;
+    return temp->data;
+}
+
+void dList::push(int num) {
     Node* new_node = new Node();
     new_node->data = num;
     Node* temp = head;
@@ -130,21 +161,37 @@ void dList::push(int num){
     size++;
 }
 
-void dList::insert(int pos, int data){
+void dList::insert(int pos, int data) {
     Node* new_node = new Node();
     new_node->data = data;
     Node* temp = head;
     for (int i = 0; i < pos; i++)
         temp = temp->pNext;
 
-    new_node->pNext=temp->pNext;
-    new_node->pPrev=temp;
-    temp->pNext->pPrev=new_node;
+    new_node->pNext = temp->pNext;
+    new_node->pPrev = temp;
+    temp->pNext->pPrev = new_node;
     temp->pNext = new_node;
     size++;
 }
 
-void dList::del(int pos){
+void dList::megaInsert(int pos, dList* list){
+    Node* temp = head;
+    Node* list1 = list->head;
+    Node* list2 = list->head;
+    Node* tlist = list->head;
+    for (int i = 0; temp->pNext != nullptr; i++)
+        list2 = temp->pNext;
+    for (int i = 0; i < pos; i++)
+        temp = temp->pNext;
+    list1->pPrev = temp;
+    list2->pNext = temp->pNext;
+    temp->pNext = list1;
+    temp->pNext->pPrev = list2;
+    size++;
+}
+
+void dList::del(int pos) {
     if (this->head == nullptr)
         return;
     Node* temp = head;
@@ -154,12 +201,12 @@ void dList::del(int pos){
     Node* del = temp->pNext;
 
     temp->pNext = temp->pNext->pNext;
-    temp->pNext->pPrev=temp;
+    temp->pNext->pPrev = temp;
     free(del);
     size--;
 }
 
-int dList::getData(int pos){
+int dList::getData(int pos) {
     Node* temp = head;
     int num = 0;
     for (int i = 0; i <= pos; i++)
@@ -168,7 +215,7 @@ int dList::getData(int pos){
     return 0;
 }
 
-void dList::printAll(){
+void dList::printAll() {
     Node* temp = head;
     while (temp->pNext != nullptr) {
         std::cout << temp->pNext->data << " ";
@@ -177,6 +224,6 @@ void dList::printAll(){
     std::cout << '\n';
 }
 
-dList::~dList(){
+dList::~dList() {
     free(head);
 }
