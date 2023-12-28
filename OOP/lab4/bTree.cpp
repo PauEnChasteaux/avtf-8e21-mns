@@ -9,6 +9,14 @@ bTree::bTree(){
     root=nullptr;
 }
 
+bTree::bTree(std::vector<int> vec,int a, int b){
+    node* tnode = createLeaf(vec[0]);
+    for(int i=1;i<vec.size();i++){
+        if(a<=vec[i] && vec[i]<=b)addLeafPrivate(vec[i],tnode);
+    }
+    root=tnode;
+}
+
 bTree::node* bTree::createLeaf(int data){
     node* tmp = new node();
     tmp->right = nullptr;
@@ -156,14 +164,14 @@ bTree::node* bTree::returnNodePrivate(int data, node* ptr){
         return nullptr;
     }
 }
-
+/**
 int bTree::returnRootData(){
     if(root!=nullptr){
         return root->data;
     }else{
         return -1;
     }
-}
+}**/
 
 bool bTree::checkData(int data){
     node* ptr = returnNode(data);
@@ -205,11 +213,11 @@ void bTree::removeNodePrivate(int data, node* ptr){
                 removeMatch(ptr, ptr->right, true):
                 removeNodePrivate(data, ptr->right);
             }else{
-                std::cout << "Data isn`t here\n";
+                //std::cout << "Data isn`t here\n";
             }
         }
     }else{
-        std::cout<<"Birch is free\n";
+        //std::cout<<"Birch is free\n";
     }
 }
 
@@ -325,6 +333,16 @@ void bTree::print2DUtil(node* ptr, int space)
     std::cout << ptr->data << "\n";
     print2DUtil(ptr->left, space);
 }
+
+// bTree bTree::subTree(bTree tree, int a, int b){
+//     bTree oak;
+//     std::vector tmp = tree.BFS();
+//     for(int i=0;a<i;i++){
+//         if(tree.checkData(i) && (a<tmp[i]<b))
+//             oak.addLeaf(tmp[i]);
+//     }
+//     return oak;
+// }
 
 bTree::~bTree() {
     removeSubtree(root);
