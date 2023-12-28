@@ -6,6 +6,14 @@ void printVec(std::vector<int> vec){
         std::cout <<vec[i]<<' ';
 }
 
+// void addEl(bTree tree1, bTree tree2,int a, int b){
+//     std::vector<int> v=tree2.DFS();
+//     for(int i=0;i<v.size();i++){
+//         if(a<v[i] && v[i]<b)
+//             tree1.addLeaf(i);
+//     }
+// }
+
 int main(){
     bTree birch;
     birch.addLeaf(5);
@@ -22,9 +30,17 @@ int main(){
     vec=birch.DFS();
     printVec(vec);
     std::cout<<'\n';
-    vec=birch.BFS();
-    printVec(vec);
+    std::vector<int> vec1;
+    vec1=birch.BFS();
+    printVec(vec1);
+
     std::cout<<'\n';
+    std::cout<<'\n';
+    bTree oak(vec1,1,12);
+    oak.print2D();
+    std::cout<<'\n';
+    std::cout<<'\n';
+
     std::cout<<birch.findHight()<<'\n';
     std::cout<<birch.findSmallest()<<'\n';
     std::cout<<birch.findBiggest()<<'\n';
@@ -33,6 +49,7 @@ int main(){
     birch.removeNode(5);
     birch.print2D();
     std::cout<<'\n';
+
 
     return 0;
 }
