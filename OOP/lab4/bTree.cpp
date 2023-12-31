@@ -10,11 +10,17 @@ bTree::bTree(){
 }
 
 bTree::bTree(std::vector<int> vec,int a, int b){
-    node* tnode = createLeaf(vec[0]);
-    for(int i=1;i<vec.size();i++){
-        if(a<=vec[i] && vec[i]<=b)addLeafPrivate(vec[i],tnode);
+    node* tmpnode;
+    bool ch=true;
+    for(int i=0;i<vec.size();i++){
+        if(a<=vec[i] && vec[i]<=b && ch){
+            node* tmpnode1 = createLeaf(vec[i]);
+            tmpnode = tmpnode1;
+            ch=false;
+        }
+        if(a<=vec[i] && vec[i]<=b && !ch)addLeafPrivate(vec[i],tmpnode);
     }
-    root=tnode;
+    root=tmpnode;
 }
 
 bTree::node* bTree::createLeaf(int data){

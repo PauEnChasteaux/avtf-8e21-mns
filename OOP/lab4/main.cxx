@@ -36,7 +36,7 @@ int main(){
 
     std::cout<<'\n';
     std::cout<<'\n';
-    bTree oak(vec1,1,12);
+    bTree oak(vec1,1,4);
     oak.print2D();
     std::cout<<'\n';
     std::cout<<'\n';
